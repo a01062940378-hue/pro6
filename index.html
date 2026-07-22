@@ -3,69 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>깜짝 선물 이벤트</title>
+    <title>괴도의 깜짝 보급품</title>
     <style>
         body { 
             font-family: 'Apple SD Gothic Neo', 'Pretendard', sans-serif; 
-            background-color: #ffe6e6; /* 사랑스러운 연핑크 배경 */
-            color: #333333; 
+            background-color: #121212; 
+            color: #e0e0e0; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center; 
             min-height: 100vh; 
             margin: 0; 
+            padding: 20px;
+            box-sizing: border-box;
         }
         
-        .card { 
-            background: #ffffff; 
-            width: 85%; 
-            max-width: 350px; 
-            padding: 40px 20px; 
-            border-radius: 20px; 
-            text-align: center; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+            margin-top: 20px;
         }
 
-        h1 {
-            font-size: 22px;
-            color: #ff6b81;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-        
-        .question { 
-            font-size: 18px; 
-            font-weight: bold;
-            line-height: 1.5; 
-            margin-bottom: 10px;
+        /* 괴도의 메시지 박스 */
+        .message-box { 
+            background: #1e1e1e; 
+            padding: 25px; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            line-height: 1.8; 
+            text-align: left; 
+            border-left: 5px solid #9b59b6; 
             word-break: keep-all; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
         }
 
-        .hint {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-bottom: 30px;
+        .highlight-title {
+            font-size: 19px; 
+            color: #9b59b6;
+            font-weight: bold;
+        }
+
+        /* 자물쇠(퀴즈) 영역 */
+        .lock-stage {
+            background: #2c2c2c;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid #444;
+            display: none; /* 기본적으로 숨김, 자바스크립트로 제어 */
+        }
+
+        .lock-title {
+            color: #f1c40f;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .lock-text {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            word-break: keep-all;
+            text-align: left;
         }
 
         .input-box {
             width: 80%;
             padding: 12px;
-            border: 2px solid #ff6b81;
+            border: 2px solid #555;
             border-radius: 8px;
+            background: #1a1a1a;
+            color: #fff;
             font-size: 16px;
             text-align: center;
             outline: none;
             margin-bottom: 15px;
-            transition: box-shadow 0.3s;
+            transition: border-color 0.3s;
         }
 
         .input-box:focus {
-            box-shadow: 0 0 8px rgba(255, 107, 129, 0.5);
+            border-color: #9b59b6;
         }
 
         .submit-btn {
-            background: #ff6b81;
+            background: #9b59b6;
             color: #ffffff;
             border: none;
             padding: 12px 30px;
@@ -77,71 +101,162 @@
         }
 
         .submit-btn:hover {
-            background: #ff4757;
+            background: #8e44ad;
         }
 
-        #gift-area {
-            display: none; /* 정답을 맞히기 전에는 숨김 */
-            margin-top: 25px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #gift-area img {
-            width: 100%;
-            max-width: 250px;
+        /* 최종 성공 메시지 영역 */
+        #success-stage {
+            text-align: center;
+            background: #1e1e1e;
+            padding: 30px 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border-left: 5px solid #f1c40f;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            display: none;
+            animation: fadeIn 1s ease-in-out;
         }
 
-        .congrats-text {
-            color: #ff4757;
-            font-size: 18px;
-            font-weight: bold;
+        #success-stage h2 {
+            color: #f1c40f;
+            margin-top: 0;
             margin-bottom: 15px;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        #success-stage p {
+            line-height: 1.6;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .gift-img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+
+        .gift-img:hover {
+            transform: scale(1.02);
+        }
+
+        .download-notice {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>🎁 깜짝 퀴즈 🎁</h1>
+    <div class="container">
         
-        <div id="quiz-area">
-            <div class="question">세상에서 가장 기분 좋은 '금'은 무엇일까요?</div>
-            <div class="hint">(힌트: 우리가 함께하고 있는 2글자)</div>
-            
-            <input type="text" id="answer" class="input-box" placeholder="정답을 입력해주세요">
-            <br>
-            <button class="submit-btn" onclick="checkAnswer()">선물 확인하기</button>
+        <!-- 도입부 메시지 -->
+        <div id="intro-message" class="message-box">
+            🎩 <span class="highlight-title">[괴도 X의 깜짝 보급품]</span><br><br>
+            크큭... 명탐정 은빈, 나를 따라잡으려면 좀 더 빨리 움직여야 할거야.<br>
+            이 괴도 X가 특별히 힘을 좀 내보라고 달콤한 선물을 하나 준비했다네.<br><br>
+            하지만 내가 누군가? 명색이 세기의 괴도인데 그냥 호락호락하게 선물을 넘겨줄 수는 없지!<br>
+            내가 특별히 만든 '3중 보안 자물쇠'가 걸려있다네. 세 개의 문제를 순서대로 모두 풀어내야만 시원한 선물을 얻을 수 있을 거다.<br><br>
+            어디 한번 굳어버린 머리도 풀 겸, 내 문제에 도전해 보시지!
         </div>
 
-        <!-- 정답을 맞히면 나타나는 영역 -->
-        <div id="gift-area">
-            <div class="congrats-text">🎉 딩동댕! 정답입니다 🎉</div>
-            <!-- 아래 src 주소에 실제 기프티콘 이미지 링크를 넣어주세요 -->
-            <img src="https://via.placeholder.com/300x400/ff6b81/ffffff?text=Gifticon+Image" alt="기프티콘">
+        <!-- 1단계 -->
+        <div id="stage-1" class="lock-stage" style="display: block;">
+            <div class="lock-title">🔒 첫 번째 자물쇠 : 기원의 기억</div>
+            <div class="lock-text">
+                모든 사건에는 시작이 있는 법. 내 정보망에 따르면 너희 두 사람의 인연을 이어준 결정적인 단서가 하나 있다지?<br><br>
+                설마 그 중요한 물건이 무엇인지 벌써 잊은 건 아니겠지?
+            </div>
+            <input type="text" id="answer-1" class="input-box" placeholder="정답 입력">
+            <br>
+            <button class="submit-btn" onclick="checkAnswer(1)">자물쇠 풀기</button>
         </div>
+
+        <!-- 2단계 -->
+        <div id="stage-2" class="lock-stage">
+            <div class="lock-title">🔒 두 번째 자물쇠 : 운명의 방정식</div>
+            <div class="lock-text">
+                첫 번째 자물쇠를 풀다니 제법이군. 하지만 두 번째는 조금 복잡할 거다.<br><br>
+                사랑도 때로는 치밀한 계산이 필요한 법이지. 너와 그 녀석이 태어난 생일, 그리고 너희가 처음 만난 운명적인 기념일... 이 모든 숫자를 곱하면 도대체 어떤 거대한 숫자가 탄생할까?<br><br>
+                이 정도는 풀어야 명탐정 은빈 아니겠나? 크큭....
+            </div>
+            <!-- 숫자를 입력받으므로 type을 number로 하거나 text로 처리 가능. 여기선 text로 처리 -->
+            <input type="text" id="answer-2" class="input-box" placeholder="숫자 입력">
+            <br>
+            <button class="submit-btn" onclick="checkAnswer(2)">자물쇠 풀기</button>
+        </div>
+
+        <!-- 3단계 -->
+        <div id="stage-3" class="lock-stage">
+            <div class="lock-title">🔒 세 번째 자물쇠 : 괴도의 딜레마</div>
+            <div class="lock-text">
+                여기까지 오다니, 대단해! 마지막 문제다.<br><br>
+                이 괴도 X는 말야 세상의 온갖 진귀한 보물과 현금을 훔쳤지. 이 괴도가 훔친 돈을 4글자로 표현하면 과연 뭘 것 같나?
+            </div>
+            <input type="text" id="answer-3" class="input-box" placeholder="정답 입력">
+            <br>
+            <button class="submit-btn" onclick="checkAnswer(3)">마지막 자물쇠 풀기</button>
+        </div>
+
+        <!-- 성공 화면 (모든 문제 통과 시) -->
+        <div id="success-stage">
+            <h2>🎉 보안 해제 성공!</h2>
+            <p>
+                모든 문제를 맞추다니! 대단해! 믿고 있었다네!<br>
+                축하하네 이 선물을 받게. 꼭 나를 잡기를 응원하지!<br><br>
+                행운을 빈다, 명탐정 은빈.
+            </p>
+            
+            <!-- 깃허브에 올라갈 사진 파일 이름 (예: gifticon.jpg) -->
+            <!-- 다운로드 속성을 넣어 사진 터치/클릭 시 저장되도록 설정 -->
+            <a href="gifticon.jpg" download="괴도의_선물.jpg">
+                <img src="gifticon.jpg" alt="괴도의 선물" class="gift-img">
+            </a>
+            <div class="download-notice">👆 이미지를 누르면 선물이 저장됩니다.</div>
+        </div>
+
     </div>
 
     <script>
-        function checkAnswer() {
-            var userAnswer = document.getElementById("answer").value.replace(/\s+/g, ''); // 공백 제거
-            var quizArea = document.getElementById("quiz-area");
-            var giftArea = document.getElementById("gift-area");
-
-            // 정답 설정 (현재 '지금'으로 설정되어 있습니다)
-            if (userAnswer === "지금") {
-                // 정답일 경우: 퀴즈 영역을 숨기고 선물 영역을 보여줌
-                quizArea.style.display = "none";
-                giftArea.style.display = "block";
-            } else {
-                // 오답일 경우
-                alert("아쉽지만 틀렸습니다! 다시 한 번 생각해 보세요 😉");
+        function checkAnswer(stage) {
+            if (stage === 1) {
+                var ans1 = document.getElementById("answer-1").value.replace(/\s+/g, '');
+                if (ans1 === "우산") {
+                    alert("철컥! 첫 번째 자물쇠가 열렸다.");
+                    document.getElementById("stage-1").style.display = "none";
+                    document.getElementById("stage-2").style.display = "block";
+                } else {
+                    alert("틀렸어! 기억을 다시 더듬어 보시지.");
+                }
+            } 
+            else if (stage === 2) {
+                var ans2 = document.getElementById("answer-2").value.replace(/\s+/g, '');
+                if (ans2 === "44720") {
+                    alert("철컥! 두 번째 자물쇠가 열렸다. 계산력이 제법이군.");
+                    document.getElementById("stage-2").style.display = "none";
+                    document.getElementById("stage-3").style.display = "block";
+                } else {
+                    alert("계산이 틀렸군! 다시 계산해 보시지.");
+                }
+            } 
+            else if (stage === 3) {
+                var ans3 = document.getElementById("answer-3").value.replace(/\s+/g, '');
+                if (ans3 === "슬그머니") {
+                    alert("철컥! 마지막 자물쇠까지 열렸군. 대단해!");
+                    // 3단계 숨기고 성공 화면 띄우기
+                    document.getElementById("intro-message").style.display = "none";
+                    document.getElementById("stage-3").style.display = "none";
+                    document.getElementById("success-stage").style.display = "block";
+                } else {
+                    alert("땡! 괴도의 마음을 아직 잘 모르는군.");
+                }
             }
         }
     </script>
