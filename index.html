@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>깜짝 선물 이벤트</title>
+    <style>
+        body { 
+            font-family: 'Apple SD Gothic Neo', 'Pretendard', sans-serif; 
+            background-color: #ffe6e6; /* 사랑스러운 연핑크 배경 */
+            color: #333333; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        
+        .card { 
+            background: #ffffff; 
+            width: 85%; 
+            max-width: 350px; 
+            padding: 40px 20px; 
+            border-radius: 20px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 22px;
+            color: #ff6b81;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        .question { 
+            font-size: 18px; 
+            font-weight: bold;
+            line-height: 1.5; 
+            margin-bottom: 10px;
+            word-break: keep-all; 
+        }
+
+        .hint {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .input-box {
+            width: 80%;
+            padding: 12px;
+            border: 2px solid #ff6b81;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 15px;
+            transition: box-shadow 0.3s;
+        }
+
+        .input-box:focus {
+            box-shadow: 0 0 8px rgba(255, 107, 129, 0.5);
+        }
+
+        .submit-btn {
+            background: #ff6b81;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #ff4757;
+        }
+
+        #gift-area {
+            display: none; /* 정답을 맞히기 전에는 숨김 */
+            margin-top: 25px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #gift-area img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .congrats-text {
+            color: #ff4757;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>🎁 깜짝 퀴즈 🎁</h1>
+        
+        <div id="quiz-area">
+            <div class="question">세상에서 가장 기분 좋은 '금'은 무엇일까요?</div>
+            <div class="hint">(힌트: 우리가 함께하고 있는 2글자)</div>
+            
+            <input type="text" id="answer" class="input-box" placeholder="정답을 입력해주세요">
+            <br>
+            <button class="submit-btn" onclick="checkAnswer()">선물 확인하기</button>
+        </div>
+
+        <!-- 정답을 맞히면 나타나는 영역 -->
+        <div id="gift-area">
+            <div class="congrats-text">🎉 딩동댕! 정답입니다 🎉</div>
+            <!-- 아래 src 주소에 실제 기프티콘 이미지 링크를 넣어주세요 -->
+            <img src="https://via.placeholder.com/300x400/ff6b81/ffffff?text=Gifticon+Image" alt="기프티콘">
+        </div>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            var userAnswer = document.getElementById("answer").value.replace(/\s+/g, ''); // 공백 제거
+            var quizArea = document.getElementById("quiz-area");
+            var giftArea = document.getElementById("gift-area");
+
+            // 정답 설정 (현재 '지금'으로 설정되어 있습니다)
+            if (userAnswer === "지금") {
+                // 정답일 경우: 퀴즈 영역을 숨기고 선물 영역을 보여줌
+                quizArea.style.display = "none";
+                giftArea.style.display = "block";
+            } else {
+                // 오답일 경우
+                alert("아쉽지만 틀렸습니다! 다시 한 번 생각해 보세요 😉");
+            }
+        }
+    </script>
+</body>
+</html>
